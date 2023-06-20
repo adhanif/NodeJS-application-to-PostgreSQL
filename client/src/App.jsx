@@ -25,6 +25,7 @@ function App() {
               {user.last_name}
             </h3>
             <p>{user.age}</p>
+            <p>{user.age}</p>
           </div>
         );
       })}
