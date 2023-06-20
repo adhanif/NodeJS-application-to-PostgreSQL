@@ -11,8 +11,8 @@ const getUsers = async (req, res) => {
 };
 
 const getId = async (req, res) => {
-  const { id } = req.params;
   try {
+    const { id } = req.params;
     const { rows, rowCount } = await pool.query(
       "SELECT * FROM users where id=$1;",
       [id]
@@ -39,4 +39,21 @@ const newUser = async (req, res) => {
   }
 };
 
-module.exports = { getUsers, getId, newUser };
+// PUT/:id : To edit one user(with the id)
+
+const editUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { first_name, last_name, age } = req.body;
+    const { rows } = await pool.query(
+      "UPDATE users SET first_name=$1, last_name=$2, age=$3  WHERE id=$4 RETURNING *;",
+      [first_name, last_name, age, id]
+    );
+    res.json(rows[0]);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("something went wrong");
+  }
+};
+
+module.exports = { getUsers, getId, newUser, editUser };
