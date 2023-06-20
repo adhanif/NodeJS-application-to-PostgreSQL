@@ -56,4 +56,17 @@ const editUser = async (req, res) => {
   }
 };
 
-module.exports = { getUsers, getId, newUser, editUser };
+// DELETE/:id:To delete one user(with the id)
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    // const { first_name, last_name, age } = req.body;
+    const { rows } = await pool.query("DELETE FROM users WHERE id=$1;", [id]);
+    res.json(rows[0]);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("something went wrong");
+  }
+};
+
+module.exports = { getUsers, getId, newUser, editUser, deleteUser };
